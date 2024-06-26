@@ -6,6 +6,9 @@ namespace ApiAggregation.Models
 {
     public class NewsData
     {
+        [Required(ErrorMessage = "Identifier is required")]
+        public string Id { get; set; }
+
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; }
 
