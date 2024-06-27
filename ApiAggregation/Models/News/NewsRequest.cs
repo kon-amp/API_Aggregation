@@ -1,0 +1,18 @@
+﻿namespace ApiAggregation.Models.News
+{
+    /// <summary>
+    /// Represents a request to get breaking news headlines from the News API.
+    /// </summary>
+    public class NewsRequest
+    {
+        /// <summary>
+        /// The country for which to get the top headlines.
+        /// </summary>
+        public string Country { get; set; } = "us";
+
+        /// <summary>
+        /// The API key for authenticating the request.
+        /// </summary>
+        public string ApiKey { get; set; } = string.Empty;
+    }
+}
