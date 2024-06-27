@@ -1,4 +1,7 @@
 ﻿using ApiAggregation.Models;
+using ApiAggregation.Models.News;
+using ApiAggregation.Models.Spotify;
+using ApiAggregation.Models.Weather;
 
 namespace ApiAggregation.Services
 {
@@ -15,11 +18,11 @@ namespace ApiAggregation.Services
             _spotifyService = spotifyService;
         }
 
-        public async Task<AggregatedData> GetAggregatedDataAsync(string location, string topic, string hashtag)
+        public async Task<AggregatedData> GetAggregatedDataAsync(WeatherRequest weatherRequest, NewsRequest newsRequest, SpotifyArtistsRequest spotifyRequest)
         {
-            var weatherTask = _weatherService.GetDataAsync(location);
-            var newsTask = _newsService.GetDataAsync(topic);
-            var spotifyTask = _spotifyService.GetDataAsync(hashtag);
+            Task<WeatherResponse> weatherTask = _weatherService.GetDataAsync(weatherRequest);
+            Task<NewsResponse> newsTask = _newsService.GetDataAsync(newsRequest);
+            Task<SpotifyResponse> spotifyTask = _spotifyService.GetDataAsync(spotifyRequest);
 
             await Task.WhenAll(weatherTask, newsTask, spotifyTask);
 
@@ -30,5 +33,6 @@ namespace ApiAggregation.Services
                 Spotify = await spotifyTask
             };
         }
+        
     }
 }

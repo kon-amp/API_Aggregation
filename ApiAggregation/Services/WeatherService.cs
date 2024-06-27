@@ -1,9 +1,10 @@
-﻿using ApiAggregation.Models;
-using System.Text.Json;
+﻿using ApiAggregation.Models.Weather;
+using ApiAggregation.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace ApiAggregation.Services
 {
-    public class WeatherService : IApiService<WeatherData>
+    public class WeatherService : IApiService<WeatherRequest, WeatherResponse>
     {
         private readonly HttpClient _httpClient;
 
@@ -12,34 +13,34 @@ namespace ApiAggregation.Services
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateDataAsync(WeatherData data)
+        public async Task<WeatherResponse> GetDataAsync(WeatherRequest request)
         {
-            throw new NotImplementedException();
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (string.IsNullOrEmpty(request.ApiKey))
+            {
+                throw new ArgumentException("ApiKey is required");
+            }
+
+            // TO DO - to be changed and parsed from appsettings - then create it 
+            var url = $"https://api.openweathermap.org/data/3.0/onecall?lat={request.Latitude}&lon={request.Longitude}&appid={request.ApiKey}";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var weatherResponse = JsonConvert.DeserializeObject<WeatherResponse>(content);
+
+            if (weatherResponse == null)
+            {
+                throw new InvalidOperationException("Failed to deserialize the response.");
+            }
+
+            return weatherResponse;
         }
 
-        public Task<bool> DeleteDataAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<WeatherData>> GetAllDataAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<WeatherData> GetDataAsync(string query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<WeatherData> GetDataByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateDataAsync(string id, WeatherData data)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
