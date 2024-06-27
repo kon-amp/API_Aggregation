@@ -1,6 +1,4 @@
 using ApiAggregation;
-using ApiAggregation.Models;
-using ApiAggregation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +9,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add the Startup class configuration
-var startup = new ApiAggregation.Startup(builder.Configuration);
+Startup? startup = new Startup(builder.Configuration);
 startup.ConfigureServices(builder.Services);
-var app = builder.Build();
+WebApplication? app = builder.Build();
 
 startup.Configure(app, app.Environment);
 

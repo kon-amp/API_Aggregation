@@ -1,5 +1,9 @@
 ﻿using ApiAggregation.Models;
+using ApiAggregation.Models.News;
+using ApiAggregation.Models.Spotify;
+using ApiAggregation.Models.Weather;
 using ApiAggregation.Services;
+using ApiAggregation.Services.Interfaces;
 
 namespace ApiAggregation
 {
@@ -18,9 +22,9 @@ namespace ApiAggregation
             services.AddHttpClient<WeatherService>();
             services.AddHttpClient<NewsService>();
             services.AddHttpClient<SpotifyService>();
-            services.AddScoped<IApiService<WeatherData>, WeatherService>();
-            services.AddScoped<IApiService<NewsData>, NewsService>();
-            services.AddScoped<IApiService<SpotifyData>, SpotifyService>();
+            services.AddScoped<IApiService<SpotifyArtistsRequest, SpotifyResponse>, SpotifyService>();
+            services.AddScoped<IApiService<WeatherRequest, WeatherResponse>, WeatherService>();
+            services.AddScoped<IApiService<NewsRequest, NewsResponse>, NewsService>();
             services.AddControllers();
         }
 

@@ -1,8 +1,10 @@
-﻿using ApiAggregation.Models;
+﻿using ApiAggregation.Models.News;
+using ApiAggregation.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace ApiAggregation.Services
 {
-    public class NewsService : IApiService<NewsData>
+    public class NewsService : IApiService<NewsRequest, NewsResponse>
     {
         private readonly HttpClient _httpClient;
 
@@ -11,34 +13,32 @@ namespace ApiAggregation.Services
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateDataAsync(NewsData data)
+        public async Task<NewsResponse> GetDataAsync(NewsRequest request)
         {
-            throw new NotImplementedException();
-        }
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
-        public Task<bool> DeleteDataAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
+            if (string.IsNullOrEmpty(request.Country) || string.IsNullOrEmpty(request.ApiKey))
+            {
+                throw new ArgumentException("Country and ApiKey must be provided.");
+            }
 
-        public Task<IEnumerable<NewsData>> GetAllDataAsync()
-        {
-            throw new NotImplementedException();
-        }
+            // TO DO - to be changed and parsed from appsettings - then create it 
+            string? url = $"https://newsapi.org/v2/top-headlines?country={request.Country}&apiKey={request.ApiKey}";
+            HttpResponseMessage? response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-        public Task<NewsData> GetDataAsync(string query)
-        {
-            throw new NotImplementedException();
-        }
+            string? content = await response.Content.ReadAsStringAsync();
+            NewsResponse? newsResponse = JsonConvert.DeserializeObject<NewsResponse>(content);
 
-        public Task<NewsData> GetDataByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
+            if (newsResponse == null)
+            {
+                throw new InvalidOperationException("Failed to deserialize the response.");
+            }
 
-        public Task<bool> UpdateDataAsync(string id, NewsData data)
-        {
-            throw new NotImplementedException();
+            return newsResponse;
         }
     }
 }
