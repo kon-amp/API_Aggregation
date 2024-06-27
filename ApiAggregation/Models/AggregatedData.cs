@@ -1,9 +1,13 @@
-﻿namespace ApiAggregation.Models
+﻿using ApiAggregation.Models.News;
+using ApiAggregation.Models.Spotify;
+using ApiAggregation.Models.Weather;
+
+namespace ApiAggregation.Models
 {
     public class AggregatedData
     {
-        public WeatherData Weather { get; set; }
-        public NewsData News { get; set; }
-        public SpotifyData Spotify { get; set; }
+        public WeatherResponse Weather { get; set; } = new WeatherResponse();
+        public NewsResponse News { get; set; } = new NewsResponse();
+        public SpotifyResponse Spotify { get; set; } = new SpotifyResponse();
     }
 }

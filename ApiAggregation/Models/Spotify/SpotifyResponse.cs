@@ -35,7 +35,7 @@ namespace ApiAggregation.Models.Spotify
         /// If not yet classified, the array is empty.
         /// </summary>
         [JsonProperty("genres")]
-        public List<string> Genres { get; set; }
+        public List<string> Genres { get; set; } = new List<string>();
 
         /// <summary>
         /// A link to the Web API endpoint providing full details of the artist.
