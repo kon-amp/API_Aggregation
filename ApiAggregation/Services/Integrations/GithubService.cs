@@ -2,7 +2,7 @@ using ApiAggregation.Models.Github;
 using ApiAggregation.Services.Interfaces;
 using Newtonsoft.Json;
 
-namespace ApiAggregation.Services
+namespace ApiAggregation.Services.Integrations
 {
     public class GithubService : IApiService<GithubRequest, GithubResponse>
     {
