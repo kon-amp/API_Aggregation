@@ -5,24 +5,31 @@ using ApiAggregation.Models.Spotify;
 using ApiAggregation.Models.Weather;
 using ApiAggregation.Models.Github;
 using Swashbuckle.AspNetCore.Annotations;
+using ApiAggregation.Models;
+using ApiAggregation.Services.Integrations;
+using ApiAggregation.Models.CountriesInfo;
 
 namespace ApiAggregation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class AggregationController : ControllerBase
     {
         private readonly WeatherService _weatherService;
         private readonly NewsService _newsService;
         private readonly SpotifyService _spotifyService;
         private readonly GithubService _githubService;
+        private readonly CountriesService _countriesService;
+        private readonly AggregationService _aggregationService;
 
-        public AggregationController(WeatherService weatherService, NewsService newsService, SpotifyService spotifyService, GithubService githubService)
+        public AggregationController(WeatherService weatherService, NewsService newsService, SpotifyService spotifyService, GithubService githubService, CountriesService countriesService, AggregationService aggregationService)
         {
             _weatherService = weatherService;
             _newsService = newsService;
             _spotifyService = spotifyService;
             _githubService = githubService;
+            _countriesService = countriesService;
+            _aggregationService = aggregationService;
         }
 
         [HttpGet("Weather")]
@@ -41,6 +48,14 @@ namespace ApiAggregation.Controllers
             return Ok(response);
         }
 
+        [HttpGet("Countries")]
+        [SwaggerOperation(Summary = "Countries Informations")]
+        public async Task<IActionResult> GetGithub([FromQuery] CountriesInfoRequest request)
+        {
+            CountriesInfoResponse? response = await _countriesService.GetDataAsync(request);
+            return Ok(response);
+        }
+
         [HttpGet("Spotify")]
         [SwaggerOperation(Summary = "Artists information", Description = "Get artists information based on spotify id")]
         public async Task<IActionResult> GetSpotify([FromQuery] SpotifyArtistsRequest request)
@@ -56,6 +71,13 @@ namespace ApiAggregation.Controllers
             GithubResponse? response = await _githubService.GetDataAsync(request);
             return Ok(response);
         }
-        
+
+        [HttpGet("GetAll")]
+        [SwaggerOperation(Summary = "All APIs", Description = "Get All Available Apis Simultaneously")]
+        public async Task<IActionResult> GetAllApis([FromQuery] WeatherRequest weatherRequest, [FromQuery] NewsRequest newsRequest, [FromQuery] CountriesInfoRequest countriesInfoRequest)
+        {
+            AggregatedData? response = await _aggregationService.GetAggregatedDataAsync(weatherRequest, newsRequest, countriesInfoRequest);
+            return Ok(response);
+        }
     }
 }
