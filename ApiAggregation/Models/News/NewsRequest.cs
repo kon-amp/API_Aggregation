@@ -1,4 +1,6 @@
-﻿namespace ApiAggregation.Models.News
+﻿using ApiAggregation.Models.Enums;
+
+namespace ApiAggregation.Models.News
 {
     /// <summary>
     /// Represents a request to get breaking news headlines from the News API.
@@ -8,10 +10,10 @@
         /// <summary>
         /// The country for which to get the top headlines.
         /// </summary>
-        public string Country { get; set; } = "us";
+        public NewsApiCountryEnumOption Country { get; set; } = NewsApiCountryEnumOption.gr;
 
         /// <summary>
-        /// The API key for authenticating the request.
+        /// The News API key for authenticating the request.
         /// </summary>
         public string ApiKey { get; set; } = string.Empty;
     }

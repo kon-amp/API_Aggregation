@@ -36,7 +36,7 @@ namespace ApiAggregation.Models.Github
         public int Page { get; set; } = 1; 
 
         /// <summary>
-        /// The API key for authenticating the request.
+        /// The GitHub API key for authenticating the request.
         /// </summary>
         public string ApiKey { get; set; } = string.Empty;
     }
