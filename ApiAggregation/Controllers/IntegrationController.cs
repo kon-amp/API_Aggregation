@@ -8,12 +8,14 @@ using Swashbuckle.AspNetCore.Annotations;
 using ApiAggregation.Models;
 using ApiAggregation.Services.Integrations;
 using ApiAggregation.Models.CountriesInfo;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiAggregation.Controllers
 {
     [ApiController]
-    [Route("api")]
-    public class AggregationController : ControllerBase
+    [Route("api/[controller]")]
+    [Authorize]
+    public class IntegrationController : ControllerBase
     {
         private readonly WeatherService _weatherService;
         private readonly NewsService _newsService;
@@ -22,7 +24,7 @@ namespace ApiAggregation.Controllers
         private readonly CountriesService _countriesService;
         private readonly AggregationService _aggregationService;
 
-        public AggregationController(WeatherService weatherService, NewsService newsService, SpotifyService spotifyService, GithubService githubService, CountriesService countriesService, AggregationService aggregationService)
+        public IntegrationController(WeatherService weatherService, NewsService newsService, SpotifyService spotifyService, GithubService githubService, CountriesService countriesService, AggregationService aggregationService)
         {
             _weatherService = weatherService;
             _newsService = newsService;
@@ -50,9 +52,19 @@ namespace ApiAggregation.Controllers
 
         [HttpGet("Countries")]
         [SwaggerOperation(Summary = "Countries Informations")]
-        public async Task<IActionResult> GetGithub([FromQuery] CountriesInfoRequest request)
+        public async Task<IActionResult> GetCountries([FromQuery] CountriesInfoRequest request)
         {
             CountriesInfoResponse? response = await _countriesService.GetDataAsync(request);
+            return Ok(response);
+        }
+
+        [HttpGet("GetAll")]
+        [SwaggerOperation(Summary = "All APIs", Description = "Get All Available Apis Simultaneously")]
+        public async Task<IActionResult> GetAllApis([FromQuery] WeatherRequest weatherRequest, [FromQuery] NewsRequest newsRequest, [FromQuery] CountriesInfoRequest countriesInfoRequest)
+        {
+            //var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            AggregatedData? response = await _aggregationService.GetAggregatedDataAsync(weatherRequest, newsRequest, countriesInfoRequest);
             return Ok(response);
         }
 
@@ -69,14 +81,6 @@ namespace ApiAggregation.Controllers
         public async Task<IActionResult> GetGithub([FromQuery] GithubRequest request)
         {
             GithubResponse? response = await _githubService.GetDataAsync(request);
-            return Ok(response);
-        }
-
-        [HttpGet("GetAll")]
-        [SwaggerOperation(Summary = "All APIs", Description = "Get All Available Apis Simultaneously")]
-        public async Task<IActionResult> GetAllApis([FromQuery] WeatherRequest weatherRequest, [FromQuery] NewsRequest newsRequest, [FromQuery] CountriesInfoRequest countriesInfoRequest)
-        {
-            AggregatedData? response = await _aggregationService.GetAggregatedDataAsync(weatherRequest, newsRequest, countriesInfoRequest);
             return Ok(response);
         }
     }
