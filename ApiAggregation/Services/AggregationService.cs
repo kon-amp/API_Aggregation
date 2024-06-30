@@ -11,16 +11,18 @@ using System.Text;
 
 namespace ApiAggregation.Services
 {
-    public class AggregationService
+    public class AggregationService : IAggregationService
     {
-        private readonly WeatherService _weatherService;
-        private readonly NewsService _newsService;
-        private readonly CountriesService _countriesService;
+        private readonly IApiService<WeatherRequest, WeatherResponse> _weatherService;
+        private readonly IApiService<NewsRequest, NewsResponse> _newsService;
+        private readonly IApiService<CountriesInfoRequest, CountriesInfoResponse> _countriesService;
         private readonly ICacheService _cacheService;
-        //private readonly SpotifyService _spotifyService;
-        //private readonly GithubService _githubService;
 
-        public AggregationService(WeatherService weatherService, NewsService newsService,CountriesService countriesService, ICacheService cacheService)
+        public AggregationService(
+            IApiService<WeatherRequest, WeatherResponse> weatherService,
+            IApiService<NewsRequest, NewsResponse> newsService,
+            IApiService<CountriesInfoRequest, CountriesInfoResponse> countriesService,
+            ICacheService cacheService)
         {
             _weatherService = weatherService;
             _newsService = newsService;
