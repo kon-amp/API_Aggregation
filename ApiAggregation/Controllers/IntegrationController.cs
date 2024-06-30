@@ -9,6 +9,7 @@ using ApiAggregation.Models;
 using ApiAggregation.Services.Integrations;
 using ApiAggregation.Models.CountriesInfo;
 using Microsoft.AspNetCore.Authorization;
+using ApiAggregation.Services.Interfaces;
 
 namespace ApiAggregation.Controllers
 {
@@ -17,14 +18,20 @@ namespace ApiAggregation.Controllers
     [Authorize]
     public class IntegrationController : ControllerBase
     {
-        private readonly WeatherService _weatherService;
-        private readonly NewsService _newsService;
-        private readonly SpotifyService _spotifyService;
-        private readonly GithubService _githubService;
-        private readonly CountriesService _countriesService;
-        private readonly AggregationService _aggregationService;
+        private readonly IApiService<WeatherRequest, WeatherResponse> _weatherService;
+        private readonly IApiService<NewsRequest, NewsResponse> _newsService;
+        private readonly IApiService<SpotifyArtistsRequest, SpotifyResponse> _spotifyService;
+        private readonly IApiService<GithubRequest, GithubResponse> _githubService;
+        private readonly IApiService<CountriesInfoRequest, CountriesInfoResponse> _countriesService;
+        private readonly IAggregationService _aggregationService;
 
-        public IntegrationController(WeatherService weatherService, NewsService newsService, SpotifyService spotifyService, GithubService githubService, CountriesService countriesService, AggregationService aggregationService)
+        public IntegrationController(
+            IApiService<WeatherRequest, WeatherResponse> weatherService,
+            IApiService<NewsRequest, NewsResponse> newsService,
+            IApiService<SpotifyArtistsRequest, SpotifyResponse> spotifyService,
+            IApiService<GithubRequest, GithubResponse> githubService,
+            IApiService<CountriesInfoRequest, CountriesInfoResponse> countriesService,
+            IAggregationService aggregationService)
         {
             _weatherService = weatherService;
             _newsService = newsService;
@@ -62,8 +69,6 @@ namespace ApiAggregation.Controllers
         [SwaggerOperation(Summary = "All APIs", Description = "Get All Available Apis Simultaneously")]
         public async Task<IActionResult> GetAllApis([FromQuery] WeatherRequest weatherRequest, [FromQuery] NewsRequest newsRequest, [FromQuery] CountriesInfoRequest countriesInfoRequest)
         {
-            //var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
             AggregatedData? response = await _aggregationService.GetAggregatedDataAsync(weatherRequest, newsRequest, countriesInfoRequest);
             return Ok(response);
         }
