@@ -6,12 +6,22 @@ using Newtonsoft.Json;
 
 namespace ApiAggregation.Services.Integrations
 {
+    /// <summary>
+    /// Service for interacting with the weather API.
+    /// Implements <see cref="IApiService{WeatherRequest, WeatherResponse}"/>.
+    /// </summary>
     public class WeatherService : IApiService<WeatherRequest, WeatherResponse>
     {
         private readonly HttpClient _httpClient;
         private readonly WeatherApiSettings _settings;
         private readonly ILogger<WeatherService> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WeatherService"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for API requests.</param>
+        /// <param name="settings">Settings for the weather API.</param>
+        /// <param name="logger">Logger for logging messages and errors.</param>
         public WeatherService(HttpClient httpClient, IOptions<ApiSettings> settings, ILogger<WeatherService> logger)
         {
             _httpClient = httpClient;
@@ -19,6 +29,11 @@ namespace ApiAggregation.Services.Integrations
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves weather information based on the provided request.
+        /// </summary>
+        /// <param name="request">Request containing parameters for fetching weather data.</param>
+        /// <returns>A <see cref="WeatherResponse"/> containing the weather data.</returns>
         public async Task<WeatherResponse> GetDataAsync(WeatherRequest request)
         {
             if (request == null)

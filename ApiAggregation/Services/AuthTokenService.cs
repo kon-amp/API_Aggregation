@@ -5,8 +5,16 @@ using System.Text;
 
 namespace ApiAggregation.Services
 {
+    /// <summary>
+    /// Service for generating JWT authentication tokens.
+    /// </summary>
     public class AuthTokenService
     {
+        /// <summary>
+        /// Generates a JWT token for a given username.
+        /// </summary>
+        /// <param name="username">The username for which the token is generated.</param>
+        /// <returns>A string representing the generated JWT token.</returns>
         public string GenerateToken(string username)
         {
             var claims = new[]

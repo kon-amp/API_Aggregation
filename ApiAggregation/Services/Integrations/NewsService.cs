@@ -13,6 +13,13 @@ namespace ApiAggregation.Services.Integrations
         private readonly NewsApiSettings _settings;
         private readonly ILogger<NewsService> _logger;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsService"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for API requests.</param>
+        /// <param name="settings">Settings for the news API.</param>
+        /// <param name="logger">Logger for logging messages and errors.</param>
         public NewsService(HttpClient httpClient, IOptions<ApiSettings> settings, ILogger<NewsService> logger)
         {
             _httpClient = httpClient;
@@ -20,6 +27,12 @@ namespace ApiAggregation.Services.Integrations
             _logger = logger;
         }
 
+
+        /// <summary>
+        /// Retrieves news articles based on the provided request.
+        /// </summary>
+        /// <param name="request">Request containing parameters for fetching news.</param>
+        /// <returns>A <see cref="NewsResponse"/> containing the breaking news articles.</returns>
         public async Task<NewsResponse> GetDataAsync(NewsRequest request)
         {
             if (request == null)
@@ -70,6 +83,11 @@ namespace ApiAggregation.Services.Integrations
             }
         }
 
+        /// <summary>
+        /// Returns fallback data in case of an HTTP request error.
+        /// </summary>
+        /// <param name="e">The exception that occurred during the HTTP request.</param>
+        /// <returns>A <see cref="NewsResponse"/> with fallback article.</returns>
         private NewsResponse GetFallbackData(HttpRequestException e)
         {
             _logger.LogInformation("Returning fallback data.");
