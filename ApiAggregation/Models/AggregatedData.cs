@@ -10,7 +10,6 @@ namespace ApiAggregation.Models
     {
         public WeatherResponse Weather { get; set; } = new WeatherResponse();
         public NewsResponse News { get; set; } = new NewsResponse();
-
         public CountriesInfoResponse CountriesInfo { get; set; } = new CountriesInfoResponse();
 
         //public SpotifyResponse Spotify { get; set; } = new SpotifyResponse();
