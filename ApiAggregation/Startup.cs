@@ -7,9 +7,12 @@ using ApiAggregation.Models.Weather;
 using ApiAggregation.Services;
 using ApiAggregation.Services.Integrations;
 using ApiAggregation.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -28,6 +31,21 @@ namespace ApiAggregation
         {
             // Bind configuration settings
             services.Configure<ApiSettings>(Configuration.GetSection("ApiSettings"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "Issuer",
+                    ValidAudience = "Audience",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("kon_amp_assessment_interview_2024"))
+                };
+            });
 
             // Configuration for Redis
             services.AddSingleton<IConnectionMultiplexer>(
@@ -55,6 +73,7 @@ namespace ApiAggregation
             services.AddScoped<IApiService<GithubRequest, GithubResponse>, GithubService>();
             services.AddScoped<IApiService<CountriesInfoRequest, CountriesInfoResponse>, CountriesService>();
             services.AddScoped<AggregationService>();
+            services.AddSingleton<AuthTokenService>(); 
 
             // Add Swagger 
             services.AddEndpointsApiExplorer();
@@ -67,6 +86,34 @@ namespace ApiAggregation
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Please enter your token with Bearer prefix (ex. Bearer token))",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
+                
             });
         }
 
@@ -80,9 +127,12 @@ namespace ApiAggregation
             }
 
             app.UseHttpsRedirection();
-            //app.UseAuthorization();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
