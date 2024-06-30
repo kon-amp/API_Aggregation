@@ -74,12 +74,12 @@ namespace ApiAggregation.Services.Integrations
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError($"HTTP Request Error: {e.Message}, Status Code: {e.StatusCode}");
+                _logger.LogError("HTTP Request Error: {Message}, Status Code: {StatusCode}", e.Message, e.StatusCode);
                 return new WeatherResponse();
             }
             catch (Exception e)
             {
-                _logger.LogError($"An unexpected error occurred: {e.Message}");
+                _logger.LogError("An unexpected error occurred: {Message}", e.Message);
                 return new WeatherResponse();
             }
 

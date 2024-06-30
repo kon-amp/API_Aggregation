@@ -31,12 +31,7 @@ namespace ApiAggregation.Services.Integrations
             string? content = await response.Content.ReadAsStringAsync();
             SpotifyResponse? spotifyResponse = JsonConvert.DeserializeObject<SpotifyResponse>(content);
 
-            if (spotifyResponse == null)
-            {
-                throw new InvalidOperationException("Failed to deserialize the response.");
-            }
-
-            return spotifyResponse;
+            return spotifyResponse is null ? throw new InvalidOperationException("Failed to deserialize the response.") : spotifyResponse;
         }
 
     }

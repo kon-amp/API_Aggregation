@@ -58,7 +58,7 @@ namespace ApiAggregation.Services.Integrations
 
                 // API response can return many objects of CountriesInfo class
                 List<CountriesInfo> countriesInfo = JsonConvert.DeserializeObject<List<CountriesInfo>>(content) ?? new List<CountriesInfo>();
-                CountriesInfoResponse countriesResponse = new CountriesInfoResponse { CountriesInfo = countriesInfo };
+                CountriesInfoResponse countriesResponse = new() { CountriesInfo = countriesInfo };
                 if (countriesResponse == null)
                 {
 
@@ -70,12 +70,12 @@ namespace ApiAggregation.Services.Integrations
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError($"HTTP Request Error: {e.Message}, Status Code: {e.StatusCode}");
+                _logger.LogError("HTTP Request Error: {Message}, Status Code: {StatusCode}", e.Message, e.StatusCode);
                 return new CountriesInfoResponse();
             }
             catch (Exception e)
             {
-                _logger.LogError($"An unexpected error occurred: {e.Message}");
+                _logger.LogError("An unexpected error occurred: {Message}", e.Message);
                 return new CountriesInfoResponse();
             }
         }

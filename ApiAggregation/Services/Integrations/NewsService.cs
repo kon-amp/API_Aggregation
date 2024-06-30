@@ -2,6 +2,7 @@
 using ApiAggregation.Models.Enums;
 using ApiAggregation.Models.News;
 using ApiAggregation.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -73,12 +74,12 @@ namespace ApiAggregation.Services.Integrations
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError($"HTTP Request Error: {e.Message}, Status Code: {e.StatusCode}");
+                _logger.LogError("HTTP Request Error: {Message}, Status Code: {StatusCode}", e.Message, e.StatusCode);
                 return GetFallbackData(e);
             }
             catch (Exception e)
             {
-                _logger.LogError($"An unexpected error occurred: {e.Message}");
+                _logger.LogError("An unexpected error occurred: {Message}", e.Message);
                 return new NewsResponse { Status = "Error", TotalResults = 0, Articles = new List<Article>() };
             }
         }

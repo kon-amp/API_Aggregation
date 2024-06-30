@@ -75,7 +75,7 @@ namespace ApiAggregation.Services
         /// <param name="prefix">The prefix for the cache key.</param>
         /// <param name="requestParams">The request parameters to be included in the cache key.</param>
         /// <returns>A string representing the generated cache key.</returns>
-        private string GenerateCacheKey(string prefix, object requestParams)
+        private static string GenerateCacheKey(string prefix, object requestParams)
         {
             string serializedParams = JsonConvert.SerializeObject(requestParams);
             string paramHash = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedParams));

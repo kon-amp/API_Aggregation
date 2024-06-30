@@ -19,7 +19,6 @@ namespace ApiAggregation.Tests.ControllersTest
         private Mock<IApiService<SpotifyArtistsRequest, SpotifyResponse>> _mockSpotifyService = null!;
         private Mock<IApiService<GithubRequest, GithubResponse>> _mockGithubService = null!;
         private Mock<IApiService<CountriesInfoRequest, CountriesInfoResponse>> _mockCountriesService = null!;
-        private Mock<ICacheService> _mockCacheService = null!;
         private Mock<IAggregationService> _mockAggregationService = null!;
         private IntegrationController _controller = null!;
 
@@ -32,7 +31,6 @@ namespace ApiAggregation.Tests.ControllersTest
             _mockSpotifyService = new Mock<IApiService<SpotifyArtistsRequest, SpotifyResponse>>();
             _mockGithubService = new Mock<IApiService<GithubRequest, GithubResponse>>();
             _mockCountriesService = new Mock<IApiService<CountriesInfoRequest, CountriesInfoResponse>>();
-            _mockCacheService = new Mock<ICacheService>();
             _mockAggregationService = new Mock<IAggregationService>();
 
             // Initialize the controller
