@@ -2,6 +2,7 @@
 using ApiAggregation.Models.Enums;
 using ApiAggregation.Models.News;
 using ApiAggregation.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -13,6 +14,13 @@ namespace ApiAggregation.Services.Integrations
         private readonly NewsApiSettings _settings;
         private readonly ILogger<NewsService> _logger;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewsService"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for API requests.</param>
+        /// <param name="settings">Settings for the news API.</param>
+        /// <param name="logger">Logger for logging messages and errors.</param>
         public NewsService(HttpClient httpClient, IOptions<ApiSettings> settings, ILogger<NewsService> logger)
         {
             _httpClient = httpClient;
@@ -20,6 +28,12 @@ namespace ApiAggregation.Services.Integrations
             _logger = logger;
         }
 
+
+        /// <summary>
+        /// Retrieves news articles based on the provided request.
+        /// </summary>
+        /// <param name="request">Request containing parameters for fetching news.</param>
+        /// <returns>A <see cref="NewsResponse"/> containing the breaking news articles.</returns>
         public async Task<NewsResponse> GetDataAsync(NewsRequest request)
         {
             if (request == null)
@@ -60,16 +74,21 @@ namespace ApiAggregation.Services.Integrations
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError($"HTTP Request Error: {e.Message}, Status Code: {e.StatusCode}");
+                _logger.LogError("HTTP Request Error: {Message}, Status Code: {StatusCode}", e.Message, e.StatusCode);
                 return GetFallbackData(e);
             }
             catch (Exception e)
             {
-                _logger.LogError($"An unexpected error occurred: {e.Message}");
+                _logger.LogError("An unexpected error occurred: {Message}", e.Message);
                 return new NewsResponse { Status = "Error", TotalResults = 0, Articles = new List<Article>() };
             }
         }
 
+        /// <summary>
+        /// Returns fallback data in case of an HTTP request error.
+        /// </summary>
+        /// <param name="e">The exception that occurred during the HTTP request.</param>
+        /// <returns>A <see cref="NewsResponse"/> with fallback article.</returns>
         private NewsResponse GetFallbackData(HttpRequestException e)
         {
             _logger.LogInformation("Returning fallback data.");

@@ -1,9 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using ApiAggregation.Models.User;
+using StackExchange.Redis;
 
 namespace ApiAggregation.Models.AppSettings
 {
+    /// <summary>
+    /// Represents the API settings configured in appsettings.json.
+    /// </summary>
     public class ApiSettings
     {
+        /// <summary>
+        /// Gets or sets the settings for the login of the user
+        /// </summary>
+        public LoginModelSettings LoginModel { get; set; } = new LoginModelSettings();
         public WeatherApiSettings Weather { get; set; } = new WeatherApiSettings();
         public NewsApiSettings NewsApi { get; set; } = new NewsApiSettings();
         public CountriesApiSettings CountriesApi { get; set; } = new CountriesApiSettings();
@@ -49,4 +57,10 @@ namespace ApiAggregation.Models.AppSettings
         public string FieldsForFiltering { get; set; } = string.Empty;
     }
 
+    public class LoginModelSettings
+    {
+        public string Username { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+    }
 }

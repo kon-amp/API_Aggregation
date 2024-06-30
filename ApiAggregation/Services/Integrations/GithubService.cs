@@ -39,12 +39,7 @@ namespace ApiAggregation.Services.Integrations
             string? content = await response.Content.ReadAsStringAsync();
             GithubResponse? githubResponse = JsonConvert.DeserializeObject<GithubResponse>(content);
 
-            if (githubResponse == null)
-            {
-                throw new InvalidOperationException("Failed to deserialize the response.");
-            }
-
-            return githubResponse;
+            return githubResponse is null ? throw new InvalidOperationException("Failed to deserialize the response.") : githubResponse;
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace ApiAggregation.Models.Enums
 {
+    /// <summary>
+    /// Represents country options for the News API.
+    /// </summary>
     public enum NewsApiCountryEnumOption
     {
         [EnumMember(Value = "ae")] ae,

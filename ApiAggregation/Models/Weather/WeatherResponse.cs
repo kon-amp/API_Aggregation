@@ -25,7 +25,6 @@ namespace ApiAggregation.Models.Weather
         [JsonProperty("main")]
         public Main Main { get; set; } = new Main();
 
-
         /// <summary>
         /// Visibility, meter. The maximum value of the visibility is 10 km
         /// </summary>
@@ -43,9 +42,6 @@ namespace ApiAggregation.Models.Weather
 
         [JsonProperty("clouds")]
         public Clouds Clouds { get; set; } = new Clouds();
-
-    public class CurrentWeather
-    {
 
         /// <summary>
         /// Time of data calculation, unix, UTC
@@ -105,9 +101,6 @@ namespace ApiAggregation.Models.Weather
         /// </summary>
         [JsonProperty("id")]
         public int Id { get; set; }
-
-        [JsonProperty("temp")]
-        public double Temp { get; set; }
 
         /// <summary>
         /// Group of weather parameters (Rain, Snow, Clouds etc.)
