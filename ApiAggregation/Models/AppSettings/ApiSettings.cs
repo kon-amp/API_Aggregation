@@ -3,8 +3,14 @@ using StackExchange.Redis;
 
 namespace ApiAggregation.Models.AppSettings
 {
+    /// <summary>
+    /// Represents the API settings configured in appsettings.json.
+    /// </summary>
     public class ApiSettings
     {
+        /// <summary>
+        /// Gets or sets the settings for the login of the user
+        /// </summary>
         public LoginModelSettings LoginModel { get; set; } = new LoginModelSettings();
         public WeatherApiSettings Weather { get; set; } = new WeatherApiSettings();
         public NewsApiSettings NewsApi { get; set; } = new NewsApiSettings();

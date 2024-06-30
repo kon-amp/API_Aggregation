@@ -6,6 +6,9 @@ using ApiAggregation.Models.Weather;
 
 namespace ApiAggregation.Models
 {
+    /// <summary>
+    /// Represents response aggregated data from multiple APIs.
+    /// </summary>
     public class AggregatedData
     {
         public WeatherResponse Weather { get; set; } = new WeatherResponse();

@@ -2,11 +2,20 @@
 
 namespace ApiAggregation.Models.CountriesInfo
 {
+    /// <summary>
+    /// Represents the response containing information about multiple countries.
+    /// </summary>
     public class CountriesInfoResponse
     {
+        /// <summary>
+        /// The list of countries information.
+        /// </summary>
         public List<CountriesInfo> CountriesInfo { get; set; } = new List<CountriesInfo>();
     }
 
+    /// <summary>
+    /// Represents detailed information about a country.
+    /// </summary>
     public class CountriesInfo
     {
         [JsonProperty("capital")]
