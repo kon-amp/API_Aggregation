@@ -10,11 +10,13 @@ using ApiAggregation.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Win32;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static System.Net.WebRequestMethods;
 
 namespace ApiAggregation
 {
@@ -58,13 +60,13 @@ namespace ApiAggregation
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });
-
-            // Configure HttpClient for each service
-            services.AddHttpClient<WeatherService>();
-            services.AddHttpClient<NewsService>();
-            services.AddHttpClient<SpotifyService>();
-            services.AddHttpClient<GithubService>();
-            services.AddHttpClient<CountriesService>();
+          
+            // Register HTTP client services
+            services.AddHttpClient<IApiService<WeatherRequest, WeatherResponse>, WeatherService>();
+            services.AddHttpClient<IApiService<NewsRequest, NewsResponse>, NewsService>();
+            services.AddHttpClient<IApiService<SpotifyArtistsRequest, SpotifyResponse>, SpotifyService>();
+            services.AddHttpClient<IApiService<GithubRequest, GithubResponse>, GithubService>();
+            services.AddHttpClient<IApiService<CountriesInfoRequest, CountriesInfoResponse>, CountriesService>();
 
             // Register services with scoped lifetime
             services.AddScoped<IApiService<SpotifyArtistsRequest, SpotifyResponse>, SpotifyService>();
@@ -72,7 +74,8 @@ namespace ApiAggregation
             services.AddScoped<IApiService<NewsRequest, NewsResponse>, NewsService>();
             services.AddScoped<IApiService<GithubRequest, GithubResponse>, GithubService>();
             services.AddScoped<IApiService<CountriesInfoRequest, CountriesInfoResponse>, CountriesService>();
-            services.AddScoped<AggregationService>();
+
+            services.AddScoped<IAggregationService, AggregationService>();
             services.AddSingleton<AuthTokenService>(); 
 
             // Add Swagger 
