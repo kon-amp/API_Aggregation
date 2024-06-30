@@ -15,6 +15,53 @@ APIs planned for future integration include:
 - **GitHub API**: To retrieve repositories for specific users.
 - **Spotify API**: To gather information about artists.
 
+
+## Guide to Interact with APIs
+
+### 1) API Keys
+
+For the **Weather** and **News** APIs, an API key is required:
+
+- **Weather API Key**: Obtain from [OpenWeatherMap](https://openweathermap.org/current#call).
+- **News API Key**: Obtain from [NewsAPI](https://newsapi.org/docs/).
+
+##### Replace `*********` with your actual API keys at the configuration in `appsettings.json`:
+
+```json
+"Weather": {
+  "BaseUrl": "https://api.openweathermap.org/data/2.5/weather",
+  "ApiKey": "*********",
+  "DefaultExclude": "current,minutely",
+  "DefaultUnits": "metric",
+  "DefaultLang": "en"
+},
+"NewsApi": {
+  "BaseUrl": "https://newsapi.org/v2/top-headlines",
+  "ApiKey": "*********",
+  "User_Agent": "ApiAggregation-NewsApi",
+  "DefaultCountry": "us"
+}
+```
+
+### 2) **Obtain Credentials**:
+
+- Ensure you have the **username** and **password** defined in `appsettings.json`.
+
+### 3) **Authenticate**:
+
+- Use the credentials to obtain a token by submitting them through the login endpoint, found under the `Auth` category. Follow these steps:
+		a) Click the downward arrow on the right side of the `POST` request to reveal the login parameters.
+		b) Press the **Try it out** button.
+		c) Enter the required **Username** and **Password**.
+		d) Finally, click the large blue **Execute** button to submit your credentials.
+
+### 4) Authorize in Swagger UI:
+
+- Click the **Authorize** button in the upper right corner of the page. This will open a pop-up window where you need to enter the token from the previous step under **Value**. Make sure to format it as follows:
+```
+Bearer <token>
+```
+
 ## Project Structure
 
 ### Key Components
