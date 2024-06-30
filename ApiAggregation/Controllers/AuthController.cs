@@ -39,7 +39,7 @@ namespace ApiAggregation.Controllers
         {
             if (string.Equals(login.Username, _settings.Username) && string.Equals(login.Password, _settings.Password))
             {
-                var token = _tokenService.GenerateToken(login.Username);
+                string? token = _tokenService.GenerateToken(login.Username);
                 return Ok(new { token });
             }
 

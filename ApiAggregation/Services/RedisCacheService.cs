@@ -31,8 +31,8 @@ namespace ApiAggregation.Services
         /// <returns>A task that represents the asynchronous operation. The task result contains the data of type <typeparamref name="T"/>.</returns>
         public async Task<T> GetOrCreateAsync<T>(string cacheKey, Func<Task<T>> fetchData)
         {
-            var db = _redisConnection.GetDatabase();
-            var serializedData = await db.StringGetAsync(cacheKey);
+            IDatabase? db = _redisConnection.GetDatabase();
+            RedisValue serializedData = await db.StringGetAsync(cacheKey);
             if (!serializedData.IsNullOrEmpty)
             {
                 T? result =  JsonConvert.DeserializeObject<T>(serializedData!);

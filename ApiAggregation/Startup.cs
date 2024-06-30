@@ -10,7 +10,6 @@ using ApiAggregation.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.Win32;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Text;

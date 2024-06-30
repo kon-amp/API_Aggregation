@@ -54,9 +54,9 @@ namespace ApiAggregation.Services
             string countriesInfoCacheKey = GenerateCacheKey("countries_data", countriesInfoRequest);
 
             // Use cache service to fetch data or call the API if not cached
-            var weatherTask = _cacheService.GetOrCreateAsync<WeatherResponse>(weatherCacheKey, () => _weatherService.GetDataAsync(weatherRequest));
-            var newsTask = _cacheService.GetOrCreateAsync<NewsResponse>(newsCacheKey, () => _newsService.GetDataAsync(newsRequest));
-            var countriesTask = _cacheService.GetOrCreateAsync<CountriesInfoResponse>(countriesInfoCacheKey, () => _countriesService.GetDataAsync(countriesInfoRequest));
+            Task<WeatherResponse>? weatherTask = _cacheService.GetOrCreateAsync<WeatherResponse>(weatherCacheKey, () => _weatherService.GetDataAsync(weatherRequest));
+            Task<NewsResponse>? newsTask = _cacheService.GetOrCreateAsync<NewsResponse>(newsCacheKey, () => _newsService.GetDataAsync(newsRequest));
+            Task<CountriesInfoResponse>? countriesTask = _cacheService.GetOrCreateAsync<CountriesInfoResponse>(countriesInfoCacheKey, () => _countriesService.GetDataAsync(countriesInfoRequest));
 
             // Use parallelism to decrease response times
             await Task.WhenAll(weatherTask, newsTask, countriesTask);
