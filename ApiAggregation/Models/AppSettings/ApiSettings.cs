@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using ApiAggregation.Models.User;
+using StackExchange.Redis;
 
 namespace ApiAggregation.Models.AppSettings
 {
     public class ApiSettings
     {
+        public LoginModelSettings LoginModel { get; set; } = new LoginModelSettings();
         public WeatherApiSettings Weather { get; set; } = new WeatherApiSettings();
         public NewsApiSettings NewsApi { get; set; } = new NewsApiSettings();
         public CountriesApiSettings CountriesApi { get; set; } = new CountriesApiSettings();
@@ -49,4 +51,10 @@ namespace ApiAggregation.Models.AppSettings
         public string FieldsForFiltering { get; set; } = string.Empty;
     }
 
+    public class LoginModelSettings
+    {
+        public string Username { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+    }
 }
